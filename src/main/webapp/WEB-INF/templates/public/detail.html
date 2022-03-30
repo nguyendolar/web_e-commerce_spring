@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="li">
+
+<head >
+  <title>DealDevice-Mua thiệt bị trực tuyến giá rẻ nhất</title>
+  <meta name="description"
+        content="Mua sách online hay, giá tốt nhất, combo sách hot bán chạy, giảm giá cực khủng cùng với những ưu đãi như miễn phí giao hàng, quà tặng miễn phí, đổi trả nhanh chóng. Đa dạng sản phẩm, đáp ứng mọi nhu cầu.">
+  <meta name="keywords" content="nhà sách online, mua sách hay, sách hot, sách bán chạy, sách giảm giá nhiều">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" th:href="@{/public/css/product-item.css}">
+  <script type="text/javascript" th:src="@{/public/js/main.js}"></script>
+  <link rel="stylesheet" th:href="@{/public/fontawesome_free_5.13.0/css/all.css}">
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
+        rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" th:href="@{/public/slick/slick.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/public/slick/slick-theme.css}"/>
+  <script type="text/javascript" th:src="@{/public/slick/slick.min.js}"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  <script type="text/javascript"
+          src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+  <link rel="canonical" href="http://dealbook.xyz/">
+  <meta name="google-site-verification" content="urDZLDaX8wQZ_-x8ztGIyHqwUQh2KRHvH9FhfoGtiEw" />
+  <link rel="apple-touch-icon" sizes="180x180" th:href="@{/public/favicon_io/apple-touch-icon.png}">
+  <link rel="icon" type="image/png" sizes="32x32" th:href="@{/public/favicon_io/favicon-32x32.png}">
+  <link rel="icon" type="image/png" sizes="16x16" th:href="@{/public/favicon_io/favicon-16x16.png}">
+  <link rel="manifest" th:href="@{/public/favicon_io/site.webmanifest}">
+  <style>img[alt="www.000webhost.com"]{display: none;}</style>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script>
+    function abc(){
+      alert("Dsds")
+    }
+    function login(){
+      var password = $('#password1').val();
+      var email = $('#email1').val();
+      if (password == ''  || email == '' ){
+        swal({
+          title: 'Cần điền đầy đủ thông tin!',
+          /* text: 'Redirecting...', */
+          icon: 'error',
+          timer: 3000,
+          buttons: true,
+          type: 'error'
+        })
+      } else {
+
+        var formData = new FormData();
+        formData.append('password', password);
+        formData.append('email', email);
+        $.ajax(
+                {
+                  type: 'POST',
+                  url: '/public/user/login/',
+                  contentType: false,
+                  processData: false,
+                  data: formData,
+                  success: function (data) {
+                    if(data == "false_user"){
+                      swal({
+                        title: 'Thông tin tài khoản không chính xác!',
+                        /* text: 'Redirecting...', */
+                        icon: 'error',
+                        timer: 3000,
+                        buttons: true,
+                        type: 'error'
+                      })
+                    }else if(data == "true"){
+                      swal({
+                        title: 'Đăng nhập thành công !',
+                        /* text: 'Redirecting...', */
+                        icon: 'success',
+                        timer: 5000,
+                        buttons: true,
+                        type: 'success'
+                      })
+                      setInterval(function(){
+                        location.reload()
+                      }, 3000);
+                    } else {
+                      swal({
+                        title: 'Tài khoản chưa xác thực vui lòng check mail!',
+                        /* text: 'Redirecting...', */
+                        icon: 'error',
+                        timer: 3000,
+                        buttons: true,
+                        type: 'error'
+                      })
+                    }
+                  },
+                  error: function (err) {
+                    alert(err);
+                  }
+                }
+        )
+      }
+
+    }
+    function register(){
+      var password = $('#password').val();
+      var rePassword = $('#rePassword').val();
+      var email = $('#email').val();
+      var fullName = $('#fullName').val();
+      var phoneNumber = $('#phoneNumber').val();
+      if (password == '' || rePassword == '' || email == '' || fullName == '' || phoneNumber == ''){
+        swal({
+          title: 'Cần điền đầy đủ thông tin!',
+          /* text: 'Redirecting...', */
+          icon: 'error',
+          timer: 3000,
+          buttons: true,
+          type: 'error'
+        })
+      } else {
+        if (password !== rePassword){
+          swal({
+            title: 'Hai mật khẩu không trùng khớp!',
+            /* text: 'Redirecting...', */
+            icon: 'error',
+            timer: 3000,
+            buttons: true,
+            type: 'error'
+          })
+        } else {
+          var formData = new FormData();
+          formData.append('password', password);
+          formData.append('email', email);
+          formData.append('fullName', fullName);
+          formData.append('phoneNumber', phoneNumber);
+          formData.append('rePassword', rePassword);
+          $.ajax(
+                  {
+                    type: 'POST',
+                    url: '/public/user/register/',
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (data) {
+                      if(data == "exist"){
+                        swal({
+                          title: 'Email đã tồn tại!',
+                          /* text: 'Redirecting...', */
+                          icon: 'error',
+                          timer: 3000,
+                          buttons: true,
+                          type: 'error'
+                        })
+                      }else if(data == "true"){
+                        swal({
+                          title: 'Đăng kí thành công vui lòng vào mail xác thực!',
+                          /* text: 'Redirecting...', */
+                          icon: 'success',
+                          timer: 5000,
+                          buttons: true,
+                          type: 'success'
+                        })
+                        $('#err').val("");
+                      }
+                    },
+                    error: function (err) {
+                      alert(err);
+                    }
+                  }
+          )
+        }
+      }
+
+    }
+  </script>
+</head>
+
+<body>
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+  (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/624457ad2abe5b455fc2656d/1fvdfcvl1';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+  })();
+</script>
+<!--End of Tawk.to Script-->
+<!-- code cho nut like share facebook  -->
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v6.0"></script>
+
+<!-- header -->
+<nav th:replace="public/fragments :: html_nav" class="navbar navbar-expand-md bg-white navbar-light">
+
+</nav>
+
+
+<!-- form dang ky khi click vao button tren header-->
+<div th:replace="public/fragments :: html_register" class="modal fade mt-5" id="formdangky" data-backdrop="static" tabindex="-1" aria-labelledby="dangky_tieude"
+     aria-hidden="true">
+
+</div>
+
+<!-- form dang nhap khi click vao button tren header-->
+<div th:replace="public/fragments :: html_login" class="modal fade mt-5" id="formdangnhap" data-backdrop="static" tabindex="-1"
+     aria-labelledby="dangnhap_tieude" aria-hidden="true">
+
+</div>
+
+<!-- thanh "danh muc sach" đã được ẩn bên trong + hotline + ho tro truc tuyen -->
+<section  class="duoinavbar">
+  <div class="container text-white">
+    <div class="row justify">
+      <div class="col-lg-3 col-md-5">
+        <div class="categoryheader">
+          <div class="noidungheader text-white">
+            <i class="fa fa-bars"></i>
+            <span class="text-uppercase font-weight-bold ml-1">Danh mục thiết bị</span>
+          </div>
+          <!-- CATEGORIES -->
+          <div class="categorycontent">
+            <ul>
+              <th:block th:each="category,index : ${categories}">
+                <li th:if="${category.parentId == 0}"> <a th:href="'/public/product/'+${category.id}" th:text="${category.name}"></a><i class="fa fa-chevron-right float-right"></i>
+                  <ul>
+                    <li class="liheader"><a href="#" class="header text-uppercase" th:text="${category.name}"></a></li>
+                    <div class="content trai">
+                      <th:block th:each="category1,index1 : ${categories}">
+                        <li th:if="${category.id == category1.parentId}"><a th:text="${category1.name}" th:href="'/public/product/'+${category1.id}"></a></li>
+                        <th:block/>
+                    </div>
+                  </ul>
+                </li>
+                <th:block/>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5 ml-auto contact d-none d-md-block">
+        <div class="benphai float-right">
+          <div class="hotline">
+            <i class="fa fa-phone"></i>
+            <span>Hotline:<b>1900 1999</b> </span>
+          </div>
+          <i class="fas fa-comments-dollar"></i>
+          <a href="#">Hỗ trợ trực tuyến </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- breadcrumb  -->
+<section class="breadcrumbbar">
+  <div class="container">
+    <ol class="breadcrumb mb-0 p-0 bg-transparent">
+      <li class="breadcrumb-item"><a href="/public/home">Trang chủ</a></li>
+      <li class="breadcrumb-item active"><a th:href="'/public/product/'+${product.category.id}" th:text="${product.category.name}">Sách mới tuyển chọn</a></li>
+
+    </ol>
+  </div>
+</section>
+
+<!-- nội dung của trang  -->
+<section class="product-page mb-4">
+  <div class="container">
+    <!-- chi tiết 1 sản phẩm -->
+    <div class="product-detail bg-white p-4">
+      <div class="row">
+        <!-- ảnh  -->
+        <div class="col-md-5 khoianh">
+          <div class="anhto mb-4">
+            <a class="active"  href="images/lap-ke-hoach-kinh-doanh-hieu-qua-mt.jpg" data-fancybox="thumb-img">
+              <img th:src="'/resources/uploads/' + ${product.image}" class="product-image" alt="lap-ke-hoach-kinh-doanh-hieu-qua-mt" style="width: 100%;">
+            </a>
+
+          </div>
+          <div class="list-anhchitiet d-flex mb-4" style="margin-left: 2rem;">
+            <img class="thumb-img thumb1 mr-3 img-fluid" th:src="'/resources/uploads/' + ${product.image}"  alt="lap-ke-hoach-kinh-doanh-hieu-qua-mt">
+
+          </div>
+        </div>
+        <!-- thông tin sản phẩm: tên, giá bìa giá bán tiết kiệm, các khuyến mãi, nút chọn mua.... -->
+        <div class="col-md-7 khoithongtin">
+          <div class="row">
+            <div class="col-md-12 header">
+              <h4 class="ten" th:text="${product.name}"></h4>
+              <div class="rate">
+                <i class="fa fa-star active"></i>
+                <i class="fa fa-star active"></i>
+                <i class="fa fa-star active"></i>
+                <i class="fa fa-star active"></i>
+                <i class="fa fa-star "></i>
+              </div>
+              <hr>
+            </div>
+            <div class="col-md-7">
+              <div class="gia">
+                <div class="giabia">Giá bìa:<span class="giacu ml-2" th:text="${product.price}+' đ'"></span></div>
+                <div class="giaban">Giá bán tại DealDevice: <span
+                        class="giamoi font-weight-bold" th:text="${product.price - (product.price * product.discount / 100)}+' '">111.200 </span><span class="donvitien"> ₫</span></div>
+                <div class="tietkiem">Tiết kiệm: <b th:text="${product.price - (product.price - (product.price * product.discount / 100))}+' đ'">27.800 ₫</b> <span class="sale">-20%</span>
+                </div>
+              </div>
+              <div class="uudai my-3">
+                <h6 class="header font-weight-bold">Khuyến mãi & Ưu đãi tại DealDevice:</h6>
+                <ul>
+                  <li><b>Miễn phí giao hàng </b>cho đơn hàng từ 150.000đ ở TP.HCM và 300.000đ ở
+                    Tỉnh/Thành khác <a href="#">>> Chi tiết</a></li>
+                  <li><b>Combo sách HOT - GIẢM 25% </b><a href="#">>>Xem ngay</a></li>
+<!--                  <li>Tặng Bookmark cho mỗi đơn hàng</li>-->
+<!--                  <li>Bao sách miễn phí (theo yêu cầu)</li>-->
+                </ul>
+              </div>
+              <div class="soluong d-flex">
+                <label class="font-weight-bold">Số lượng: </label>
+                <div class="input-number input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text btn-spin btn-dec">-</span>
+                  </div>
+                  <input type="text" value="1" class="soluongsp  text-center">
+                  <div class="input-group-append">
+                    <span class="input-group-text btn-spin btn-inc">+</span>
+                  </div>
+                </div>
+              </div>
+              <div class="nutmua btn w-100 text-uppercase">Chọn mua</div>
+              <a class="huongdanmuahang text-decoration-none" href="#">(Vui lòng xem hướng dẫn mua
+                hàng)</a>
+              <small class="share">Share: </small>
+              <div class="fb-like" data-href="https://www.facebook.com/DealBook-110745443947730/"
+                   data-width="300px" data-layout="button" data-action="like" data-size="small"
+                   data-share="true"></div>
+            </div>
+            <!-- thông tin khác của sản phẩm:  tác giả, ngày xuất bản, kích thước ....  -->
+            <div class="col-md-5">
+              <div class="thongtinsach">
+                <ul>
+                  <li>Danh mục: <a th:href="'/public/product/'+${product.category.id}" class="tacgia" th:text="${product.category.name}">Brian Finch</a></li>
+                  <li>Ngày thêm: <b th:text="${product.createdAt}">04-2020</b></li>
+                  <li>Kho: <b th:text="${product.quantity}+ ' sản phẩm'">20.5 x 13.5 cm</b></li>
+                  <li>Lượt xem: <b th:text="${product.viewCount}">Bìa mềm</b></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- decripstion của 1 sản phẩm: giới thiệu , đánh giá độc giả  -->
+        <div class="product-description col-md-9">
+          <!-- 2 tab ở trên  -->
+          <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+              <a class="nav-item nav-link active text-uppercase" id="nav-gioithieu-tab"
+                 data-toggle="tab" href="#nav-gioithieu" role="tab" aria-controls="nav-gioithieu"
+                 aria-selected="true">Giới thiệu</a>
+              <a class="nav-item nav-link text-uppercase" id="nav-danhgia-tab" data-toggle="tab"
+                 href="#nav-danhgia" role="tab" aria-controls="nav-danhgia"
+                 aria-selected="false">Đánh
+                giá của độc giả</a>
+            </div>
+          </nav>
+          <!-- nội dung của từng tab  -->
+          <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active ml-3" id="nav-gioithieu" role="tabpanel"
+                 aria-labelledby="nav-gioithieu-tab">
+              <p th:utext="${product.description}"></p>
+            </div>
+            <div class="tab-pane fade" id="nav-danhgia" role="tabpanel" aria-labelledby="nav-danhgia-tab">
+              <div class="row">
+                <div class="col-md-3 text-center">
+                  <p class="tieude">Đánh giá trung bình</p>
+                  <div class="diem">0/5</div>
+                  <div class="sao">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                  </div>
+                  <p class="sonhanxet text-muted">(0 nhận xét)</p>
+                </div>
+                <div class="col-md-5">
+                  <div class="tiledanhgia text-center">
+                    <div class="motthanh d-flex align-items-center">5 <i class="fa fa-star"></i>
+                      <div class="progress mx-2">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="0"
+                             aria-valuemin="0" aria-valuemax="100"></div>
+                      </div> 0%
+                    </div>
+                    <div class="motthanh d-flex align-items-center">4 <i class="fa fa-star"></i>
+                      <div class="progress mx-2">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="0"
+                             aria-valuemin="0" aria-valuemax="100"></div>
+                      </div> 0%
+                    </div>
+                    <div class="motthanh d-flex align-items-center">3 <i class="fa fa-star"></i>
+                      <div class="progress mx-2">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="0"
+                             aria-valuemin="0" aria-valuemax="100"></div>
+                      </div> 0%
+                    </div>
+                    <div class="motthanh d-flex align-items-center">2 <i class="fa fa-star"></i>
+                      <div class="progress mx-2">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="0"
+                             aria-valuemin="0" aria-valuemax="100"></div>
+                      </div> 0%
+                    </div>
+                    <div class="motthanh d-flex align-items-center">1 <i class="fa fa-star"></i>
+                      <div class="progress mx-2">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="0"
+                             aria-valuemin="0" aria-valuemax="100"></div>
+                      </div> 0%
+                    </div>
+                    <div class="btn vietdanhgia mt-3">Viết đánh giá của bạn</div>
+                  </div>
+                  <!-- nội dung của form đánh giá  -->
+                  <div class="formdanhgia">
+                    <h6 class="tieude text-uppercase">GỬI ĐÁNH GIÁ CỦA BẠN</h6>
+                    <span class="danhgiacuaban">Đánh giá của bạn về sản phẩm này:</span>
+                    <div class="rating d-flex flex-row-reverse align-items-center justify-content-end">
+                      <input type="radio" name="star" id="star1"><label for="star1"></label>
+                      <input type="radio" name="star" id="star2"><label for="star2"></label>
+                      <input type="radio" name="star" id="star3"><label for="star3"></label>
+                      <input type="radio" name="star" id="star4"><label for="star4"></label>
+                      <input type="radio" name="star" id="star5"><label for="star5"></label>
+                    </div>
+                    <div class="form-group">
+                      <input type="text" class="txtFullname w-100" placeholder="Mời bạn nhập tên(Bắt buộc)">
+                    </div>
+                    <div class="form-group">
+                      <input type="text" class="txtEmail w-100" placeholder="Mời bạn nhập email(Bắt buộc)">
+                    </div>
+                    <div class="form-group">
+                      <input type="text" class="txtComment w-100" placeholder="Đánh giá của bạn về sản phẩm này">
+                    </div>
+                    <div class="btn nutguibl">Gửi bình luận</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <!-- het tab nav-danhgia  -->
+          </div>
+          <!-- het tab-content  -->
+        </div>
+        <!-- het product-description -->
+      </div>
+      <!-- het row  -->
+    </div>
+    <!-- het product-detail -->
+  </div>
+  <!-- het container  -->
+</section>
+<!-- het product-page -->
+
+<!-- khối sản phẩm tương tự -->
+<section class="_1khoi sachmoi">
+  <div class="container">
+    <div class="noidung bg-white" style=" width: 100%;">
+      <div class="row">
+        <!--header-->
+        <div class="col-12 d-flex justify-content-between align-items-center pb-2 bg-light pt-4">
+          <h5 class="header text-uppercase" style="font-weight: 400;">Sản phẩm tương tự</h5>
+          <a href="/public/product/all" class="btn btn-warning btn-sm text-white">Xem tất cả</a>
+        </div>
+      </div>
+      <div class="khoisanpham" style="padding-bottom: 2rem;">
+        <!-- 1 sản phẩm -->
+        <th:block th:each="product,index : ${productsExam}">
+          <div class="card">
+            <a th:href="'/public/product/detail/'+${product.id}" class="motsanpham" style="text-decoration: none; color: black;" data-toggle="tooltip"
+               data-placement="bottom" title="Lập Kế Hoạch Kinh Doanh Hiệu Quả">
+              <img class="card-img-top anh" th:src="'/resources/uploads/' + ${product.image}" alt="lap-ke-hoach-kinh-doanh-hieu-qua">
+              <div class="card-body noidungsp mt-3">
+                <h6 class="card-title ten" th:text="${product.name}">Lập Kế Hoạch Kinh Doanh Hiệu Quả</h6>
+                <small class="tacgia text-muted" th:text="${product.category.name}">Brian Finch</small>
+                <div class="gia d-flex align-items-baseline">
+                  <div class="giamoi" th:text="${product.price - (product.price * product.discount / 100)}+' đ'"></div>
+                  <div class="giacu text-muted" th:text="${product.price}+' đ'"></div>
+                  <div class="sale" th:text="'-'+${product.discount}+'%'"></div>
+                </div>
+                <div class="danhgia">
+                  <ul class="d-flex" style="list-style: none;">
+                    <li class="active"><i class="fa fa-star"></i></li>
+                    <li class="active"><i class="fa fa-star"></i></li>
+                    <li class="active"><i class="fa fa-star"></i></li>
+                    <li class="active"><i class="fa fa-star"></i></li>
+                    <li><i class="fa fa-star"></i></li>
+                    <li><span class="text-muted" th:text="${product.viewCount} + ' lượt xem'">0 nhận xét</span></li>
+                  </ul>
+                </div>
+              </div>
+            </a>
+          </div>
+          <th:block/>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- het .abovefooter  -->
+
+<!-- footer  -->
+<footer th:replace="public/fragments :: footer">
+
+</footer>
+
+<!-- nut cuon len dau trang -->
+<div class="fixed-bottom">
+  <div class="btn btn-warning float-right rounded-circle nutcuonlen" id="backtotop" href="#" style="background:#CF111A;"><i
+          class="fa fa-chevron-up text-white"></i></div>
+</div>
+
+
+</body>
+
+</html>
