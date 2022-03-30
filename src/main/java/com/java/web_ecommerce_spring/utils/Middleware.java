@@ -19,4 +19,13 @@ public class Middleware {
             return false;
         }
     }
+    public static User middlewareUser( HttpServletRequest request){;
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute(CommonConstants.SESSION_USER);
+        if (Objects.nonNull(user)) {
+            return user;
+        } else {
+            return null;
+        }
+    }
 }
