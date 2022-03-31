@@ -12,4 +12,5 @@ public interface OrderService {
     Order findOrderById(int id);
     int update(int status, int id);
     List<OrderDetail> listOd(int order_id);
+    List<Order> getAmount(int month);
 }

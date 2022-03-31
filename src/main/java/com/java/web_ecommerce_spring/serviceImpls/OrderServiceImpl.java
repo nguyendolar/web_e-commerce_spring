@@ -36,4 +36,9 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.listOd(order_id);
     }
 
+    @Override
+    public List<Order> getAmount(int month) {
+        return orderRepository.getAmount(month);
+    }
+
 }

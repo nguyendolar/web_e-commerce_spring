@@ -25,4 +25,9 @@ public interface OrderRepository extends JpaRepository<Order,Integer> {
     @Query(value = "SELECT * FROM order_detail WHERE order_id = ?",nativeQuery = true)
     List<OrderDetail> listOd(int order_id);
 
+    @Modifying
+    @Transactional
+    @Query(value = "SELECT * FROM orders WHERE MONTH(order_date) = ?",nativeQuery = true)
+    List<Order> getAmount(int month);
+
 }
