@@ -27,6 +27,7 @@
   <link rel="stylesheet" type="text/css" th:href="@{/public/slick/slick.css}" />
   <link rel="stylesheet" type="text/css" th:href="@{/public/slick/slick-theme.css}"/>
   <script type="text/javascript" th:src="@{/public/slick/slick.min.js}"></script>
+  <script type="text/javascript" th:src="@{/public/js/main.js}"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
   <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
   <script type="text/javascript"
@@ -154,13 +155,13 @@
                           title: 'Đăng nhập thành công !',
                           /* text: 'Redirecting...', */
                           icon: 'success',
-                          timer: 5000,
+                          timer: 3000,
                           buttons: true,
                           type: 'success'
                         })
                         setInterval(function(){
                           location.reload()
-                        }, 3000);
+                        }, 2000);
                       } else {
                         swal({
                           title: 'Tài khoản chưa xác thực vui lòng check mail!',
@@ -220,9 +221,13 @@
       <!-- ô đăng nhập đăng ký giỏ hàng trên header  -->
       <ul class="navbar-nav mb-1 ml-auto">
         <li class="nav-item giohang">
-          <a href="/public/cart/index" class="btn btn-secondary rounded-circle">
+          <a th:unless="${session.order}" href="/public/cart/index" class="btn btn-secondary rounded-circle">
             <i class="fa fa-shopping-cart"></i>
-            <div class="cart-amount">0</div>
+            <div class="cart-amount" id="numberCart">0</div>
+          </a>
+          <a th:if="${session.order}" href="/public/cart/index" class="btn btn-secondary rounded-circle">
+            <i class="fa fa-shopping-cart"></i>
+            <div class="cart-amount" id="numberCart" th:text="${session.order.getItemModels().size()}" >0</div>
           </a>
           <a class="nav-link text-dark giohang text-uppercase" href="/public/cart/index"
              style="display:inline-block">Giỏ

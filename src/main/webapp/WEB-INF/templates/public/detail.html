@@ -326,13 +326,14 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text btn-spin btn-dec">-</span>
                   </div>
-                  <input type="text" value="1" class="soluongsp  text-center">
+                  <input type="text" value="1" id="quantity" class="soluongsp  text-center">
                   <div class="input-group-append">
                     <span class="input-group-text btn-spin btn-inc">+</span>
                   </div>
                 </div>
               </div>
-              <div class="nutmua btn w-100 text-uppercase">Chọn mua</div>
+              <input type="hidden" id="productId" th:value="${product.id}"/>
+              <div  class="nutmua btn w-100 text-uppercase">Chọn mua</div>
               <a class="huongdanmuahang text-decoration-none" href="#">(Vui lòng xem hướng dẫn mua
                 hàng)</a>
               <small class="share">Share: </small>

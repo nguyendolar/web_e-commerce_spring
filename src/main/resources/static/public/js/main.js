@@ -307,32 +307,73 @@ $(function () {
         tag: $('.product-image').attr("alt"),
         price: parseFloat($('.gia span.giamoi').text()),
         old_price:parseFloat($('.gia span.giacu').text()),
-        inCart: 0
+        inCart: 0,
+        image:$('.product-image').attr("src")
     }
 
     let carts = document.querySelector('.nutmua');
     if (carts) {
         carts.addEventListener('click', () => {
-            cartNumbers(product);
-            totalCost(product);
+            var productId = document.getElementById("productId").value;
+            var quantity = document.getElementById("quantity").value;
+            $.ajax({
+                url: "/public/cart/add",
+                type:"post",
+                data:{
+                    productId:productId,
+                    quantity:quantity
+                },
+                success: function(data){
+                    var div = document.getElementById('numberCart');
+                    div.innerHTML = data;
+                    swal({
+                        title: 'Thêm giỏ hàng thành công',
+                        /* text: 'Redirecting...', */
+                        icon: 'success',
+                        timer: 3000,
+                        buttons: true,
+                        type: 'success'
+                    })
+                   /* var row = document.getElementById("toast");
+                    row.innerHTML = data;
+                    $(document).ready(function(){
+                        $('.toast').toast('show');
+                    });
+                    $.ajax({
+                        url: "/WebsiteBanHang/loadcart",
+                        type:"get",
+
+                        success: function(data){
+                            var row1 = document.getElementById("numberCart");
+                            row1.innerHTML = data;
+
+
+                        }
+                    });*/
+                }
+            });
         })
     }
 
     function onLoadCartNumbers() {
         let productNumbers = localStorage.getItem('cartNumbers');
         if (productNumbers) {
-            document.querySelector('.giohang .cart-amount').textContent = productNumbers;
+
         }
     }
-    function abc(){
-        alert("Dsds")
+    function abc(id){
+        alert(id)
+    }
+
+    function changeNumber(id){
+        alert(id)
     }
 
     function cartNumbers(product) {
-
+        console.log(product)
         let productNumbers = localStorage.getItem('cartNumbers');
         productNumbers = parseInt(productNumbers);
-
+        console.log(productNumbers)
         if (productNumbers) {
             localStorage.setItem('cartNumbers', productNumbers + parseInt($(".soluongsp").val()));
             document.querySelector('.giohang .cart-amount').textContent = productNumbers + parseInt($(".soluongsp").val());
@@ -346,7 +387,7 @@ $(function () {
     function setItem(product) {
         let cartItems = localStorage.getItem('productsInCart');
         cartItems = JSON.parse(cartItems);
-
+        console.log(cartItems)
         if (cartItems != null) {
             if (cartItems[product.tag] == undefined) {
                 cartItems = {
@@ -376,9 +417,6 @@ $(function () {
         }
     }
 
-    function totalCos1t() {
-       alert("dsds")
-    }
 
     function displayCart() {
         let cartItems = localStorage.getItem("productsInCart");

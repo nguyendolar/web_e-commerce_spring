@@ -40,8 +40,29 @@
     <style>img[alt="www.000webhost.com"]{display: none;}</style>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
-        function abc(){
-            alert("Dsds")
+        function changeNumber(id){
+           var nameId = 'numberCart'+id;
+           var giamoiId = "giamoi"+id;
+           var giacuId = "giacu"+id;
+           const quantity = document.getElementById(nameId).value;
+           const giamoi = document.getElementById(giamoiId);
+           const giacu = document.getElementById(giacuId);
+            $.ajax({
+                url: "/public/cart/update-number",
+                type:"post",
+                data:{
+                    productId:id,
+                    quantity:quantity
+                },
+                success: function(data){
+                    giamoi.innerHTML = data.giaMoi;
+                    giacu.innerHTML = data.giaCu;
+                    const tamtinh = document.getElementById("tamtinh");
+                    const tongtien = document.getElementById("tongtien");
+                    tamtinh.innerHTML = data.total;
+                    tongtien.innerHTML = data.total + 30000;
+                }
+            });
         }
         function login(){
             var password = $('#password1').val();
@@ -82,13 +103,13 @@
                                     title: 'Đăng nhập thành công !',
                                     /* text: 'Redirecting...', */
                                     icon: 'success',
-                                    timer: 5000,
+                                    timer: 3000,
                                     buttons: true,
                                     type: 'success'
                                 })
                                 setInterval(function(){
                                     location.reload()
-                                }, 3000);
+                                }, 2000);
                             } else {
                                 swal({
                                     title: 'Tài khoản chưa xác thực vui lòng check mail!',
@@ -217,7 +238,30 @@
      aria-labelledby="dangnhap_tieude" aria-hidden="true">
 
 </div>
-
+<div th:if="${user_login}" >
+    <script>
+        swal({
+            title: 'Bạn cần phải đăng nhập',
+            /* text: 'Redirecting...', */
+            icon: 'error',
+            timer: 3000,
+            buttons: true,
+            type: 'error'
+        })
+    </script>
+</div>
+<div th:if="${order_success}" >
+    <script>
+        swal({
+            title: 'Đặt hàng thành công',
+            /* text: 'Redirecting...', */
+            icon: 'success',
+            timer: 3000,
+            buttons: true,
+            type: 'success'
+        })
+    </script>
+</div>
 <!-- thanh "danh muc sach" đã được ẩn bên trong + hotline + ho tro truc tuyen -->
 <section  class="duoinavbar">
     <div class="container text-white">
@@ -277,12 +321,103 @@
             <div class="row">
                 <!-- giao diện giỏ hàng khi không có item  -->
                 <div class="col-12 cart-empty d-none">
-                    <div class="py-3 pl-3">
-                        <h6 class="header-gio-hang">GIỎ HÀNG CỦA BẠN <span>(0 sản phẩm)</span></h6>
+                    <div th:if="${session.order == null}" class="py-3 pl-3">
+                        <h6  class="header-gio-hang">GIỎ HÀNG CỦA BẠN <span>(0 sản phẩm)</span></h6>
                         <div class="cart-empty-content w-100 text-center justify-content-center">
-                            <img src="images/shopping-cart-not-product.png" alt="shopping-cart-not-product">
+                            <img src="/public/images/shopping-cart-not-product.png" alt="shopping-cart-not-product">
                             <p>Chưa có sản phẩm nào trong giở hàng của bạn</p>
-                            <a href="index.html" class="btn nutmuathem mb-3">Mua thêm</a>
+                            <a href="/public/home" class="btn nutmuathem mb-3">Mua thêm</a>
+                        </div>
+                    </div>
+
+                    <div th:if="${session.order != null}" class="py-3 pl-3">
+                        <h6 th:if="${session.order.getItemModels().size() == 0}" class="header-gio-hang">GIỎ HÀNG CỦA BẠN <span>(0 sản phẩm)</span></h6>
+                        <div th:if="${session.order.getItemModels().size() == 0}" class="cart-empty-content w-100 text-center justify-content-center">
+                            <img src="/public/images/shopping-cart-not-product.png" alt="shopping-cart-not-product">
+                            <p>Chưa có sản phẩm nào trong giở hàng của bạn</p>
+                            <a href="/public/home" class="btn nutmuathem mb-3">Mua thêm</a>
+                        </div>
+                    </div>
+                    <div th:if="${ session.order != null}" class="cart-content py-3 pl-3">
+                        <h6 th:if="${ session.order.getItemModels().size() != 0}" class="header-gio-hang">GIỎ HÀNG CỦA BẠN <span th:text="${session.order.getItemModels().size() +' sản phẩm'}">(1 sản phẩm)</span></h6>
+                        <div th:if="${ session.order.getItemModels().size() != 0}" class="cart-list-items">
+                            <th:block th:each="product : ${session.order.getItemModels()}">
+                            <div class="cart-item d-flex">
+                                <a th:href="'/public/product/detail/'+${product.product.id}" class="img">
+                                    <img th:src="'/resources/uploads/' + ${product.product.image}" class="img-fluid" alt="anhsp1">
+                                </a>
+                                <div class="item-caption d-flex w-100">
+                                    <div class="item-info ml-3">
+                                        <a th:href="'/public/product/detail/'+${product.product.id}" class="ten" th:text="${product.product.name}" ></a>
+                                        <div class="soluong d-flex">
+                                            <div class="input-number input-group mb-3">
+                                                <input th:onchange="'changeNumber(' +${product.product.id}+ ')'" th:id="${'numberCart'+product.product.id}" type="number" min="1" th:value="${product.quantity}" style="width: 50px" class="soluongsp  text-center">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="margin-right: 20px" class="item-price ml-auto d-flex flex-column align-items-end">
+                                        <div class="giamoi" th:id="${'giamoi'+product.product.id}" th:text="${product.product.price * product.quantity - (product.product.price * product.product.discount / 100)}"></div>
+                                        <div class="giacu" th:id="${'giacu'+product.product.id}" th:text="${product.product.price * product.quantity}"></div>
+                                        <a th:href="${'/public/cart/delete/'+product.product.id}" class="remove mt-auto"><i class="far fa-trash-alt"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr><th:block/>
+                        </div>
+                        <div class="row">
+                                <div class="col-lg-6">
+                                    <form action="/public/cart/order" method="post" class="p-4 border rounded">
+                                        <div class="row form-group">
+                                            <div class="col-md-12 mb-3 mb-md-0">
+                                                <label class="text-black" for="fname">Địa chỉ</label>
+                                                <input type="text" id="fname" name="address" class="form-control" placeholder="Nhập địa chỉ nhận hàng" required>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group mb-4">
+                                            <div class="col-md-12 mb-3 mb-md-0">
+                                                <label class="text-black" for="fname">Số điện thoại</label>
+                                                <input type="text" id="fname" name="phoneNumber" class="form-control" placeholder="Nhập số điện thoại" required>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group mb-4">
+                                            <div class="col-md-12 mb-3 mb-md-0">
+                                                <label class="text-black" for="fname">Ghi chú</label>
+                                                <textarea type="text" name="note" class="form-control" placeholder="Nhập ghi chú"></textarea>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="row form-group">
+                                            <div class="col-md-12">
+                                                <input type="submit" value="Đặt hàng" class="btn px-4 btn-danger text-white">
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            <div class="col-lg-6">
+                                <div class="tonggiatien" style="margin-right: 20px">
+                                    <div class="group d-flex justify-content-between">
+                                        <p class="label">Tạm tính:</p>
+                                        <p class="tamtinh" th:id="tamtinh" th:text="${session.order.total-30000}">328.000 ₫</p>
+                                    </div>
+                                    <div class="group d-flex justify-content-between">
+                                        <p class="label">Phí vận chuyển:</p>
+                                        <p class="phivanchuyen">30000</p>
+                                    </div>
+                                    <div class="group d-flex justify-content-between">
+                                        <p class="label">Phí dịch vụ:</p>
+                                        <p class="phidicvu">0</p>
+                                    </div>
+                                    <div class="group d-flex justify-content-between align-items-center">
+                                        <strong class="text-uppercase">Tổng cộng:</strong>
+                                        <p class="tongcong" th:id="tongtien" th:text="${session.order.total+' đ'}">328.000 ₫</p>
+                                    </div>
+                                    <small class="note d-flex justify-content-end text-muted">
+                                        (Giá đã bao gồm VAT)
+                                    </small>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -290,8 +425,9 @@
                 <!-- giao diện giỏ hàng khi có hàng (phần comment màu xanh bên dưới là phần 2 sản phẩm trong giỏ hàng nhưng giờ đã demo bằng jquery) -->
                 <div class="col-md-8 cart">
                     <div class="cart-content py-3 pl-3">
-                        <!-- <h6 class="header-gio-hang">GIỎ HÀNG CỦA BẠN <span>(1 sản phẩm)</span></h6>
+                         <h6 class="header-gio-hang">GIỎ HÀNG CỦA BẠN <span>(1 sản phẩm)</span></h6>
                         <div class="cart-list-items">
+
                             <div class="cart-item d-flex">
                                 <a href="product-item.html" class="img">
                                     <img src="images/anhsp1.jpg" class="img-fluid" alt="anhsp1">
@@ -319,10 +455,10 @@
                                 </div>
                             </div>
                             <hr>
-                        </div> -->
-                        <!-- <div class="row">
+                        </div>
+                         <div class="row">
                             <div class="col-md-3">
-                                <a href="index.html" class="btn nutmuathem mb-3">Mua thêm</a>
+                                <a href="/public/home" class="btn nutmuathem mb-3">Mua thêm</a>
                             </div>
                             <div class="col-md-5 offset-md-4">
                                 <div class="tonggiatien">
@@ -351,7 +487,7 @@
                                     </small>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
 

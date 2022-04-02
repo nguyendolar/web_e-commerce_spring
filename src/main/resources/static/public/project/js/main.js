@@ -307,7 +307,8 @@ $(function () {
         tag: $('.product-image').attr("alt"),
         price: parseFloat($('.gia span.giamoi').text()),
         old_price:parseFloat($('.gia span.giacu').text()),
-        inCart: 0
+        inCart: 0,
+
     }
 
     let carts = document.querySelector('.nutmua');
@@ -321,7 +322,7 @@ $(function () {
     function onLoadCartNumbers() {
         let productNumbers = localStorage.getItem('cartNumbers');
         if (productNumbers) {
-            document.querySelector('.giohang .cart-amount').textContent = productNumbers;
+
         }
     }
 
@@ -400,7 +401,7 @@ $(function () {
                 cartContent.innerHTML += `
                     <div class="cart-item d-flex">
                         <a href="product-item.html" class="img">
-                            <img src="images/${item.tag}.jpg" class="img-fluid" alt="${item.tag}">
+                            <img src="${item.image}" class="img-fluid" alt="${item.tag}">
                         </a>
                         <div class="item-caption d-flex w-100">
                             <div class="item-info ml-3">

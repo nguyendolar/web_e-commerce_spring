@@ -37,8 +37,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+<<<<<<< Updated upstream
     public List<Order> getAmount(int month) {
         return orderRepository.getAmount(month);
+=======
+    public Order save(Order order) {
+        return orderRepository.save(order);
+>>>>>>> Stashed changes
     }
 
 }

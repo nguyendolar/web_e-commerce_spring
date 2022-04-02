@@ -9,4 +9,5 @@ import java.util.List;
 @Service
 public interface OrderDetailService {
     List<OrderDetail> findOrderDetailsByOrder(Order order);
+    OrderDetail save(OrderDetail orderDetail);
 }
