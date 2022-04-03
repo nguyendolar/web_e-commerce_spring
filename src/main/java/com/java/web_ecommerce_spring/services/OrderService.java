@@ -2,6 +2,7 @@ package com.java.web_ecommerce_spring.services;
 
 import com.java.web_ecommerce_spring.domain.Order;
 import com.java.web_ecommerce_spring.domain.OrderDetail;
+import com.java.web_ecommerce_spring.domain.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,4 +15,5 @@ public interface OrderService {
     List<OrderDetail> listOd(int order_id);
     List<Order> getAmount(int month);
     Order save(Order order);
+    List<Order> findOrderByUser(User user);
 }

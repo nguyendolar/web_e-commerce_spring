@@ -163,6 +163,7 @@ public class CartController {
             order.setDescription(note);
             order.setAmount(orderItem.getTotal());
             order.setPhoneNumber(phoneNumber);
+            order.setStatus(1);
             order.setUser(checkAuth);
             order.setOrderDate(java.time.LocalDate.now().toString());
             orderService.save(order);
@@ -171,7 +172,7 @@ public class CartController {
                 OrderDetail orderDetail = new OrderDetail();
                 orderDetail.setOrder(order);
                 orderDetail.setProduct(orderItem.getItemModels().get(i).getProduct());
-                orderDetail.setDiscount(orderItem.getItemModels().get(i).getProduct().getDiscount());
+                orderDetail.setDiscount(orderItem.getItemModels().get(i).getQuantity());
                 orderDetail.setUnitPrice((orderItem.getItemModels().get(i).getProduct().getPrice() - (orderItem.getItemModels().get(i).getProduct().getPrice() * orderItem.getItemModels().get(i).getProduct().getDiscount()/ 100)));
                 orderDetailService.save(orderDetail);
             }

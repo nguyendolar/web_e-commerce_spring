@@ -180,7 +180,7 @@
                                     })
                                 }else if(data == "true"){
                                     swal({
-                                        title: 'Đăng kí thành công vui lòng vào mail xác thực!',
+                                        title: 'Đăng kí thành công!',
                                         /* text: 'Redirecting...', */
                                         icon: 'success',
                                         timer: 5000,
@@ -356,8 +356,8 @@
                                         </div>
                                     </div>
                                     <div style="margin-right: 20px" class="item-price ml-auto d-flex flex-column align-items-end">
-                                        <div class="giamoi" th:id="${'giamoi'+product.product.id}" th:text="${product.product.price * product.quantity - (product.product.price * product.product.discount / 100)}"></div>
-                                        <div class="giacu" th:id="${'giacu'+product.product.id}" th:text="${product.product.price * product.quantity}"></div>
+                                        <div class="giamoi" th:id="${'giamoi'+product.product.id}" th:text="${#numbers.formatCurrency((product.product.price - (product.product.price * product.product.discount / 100)) * product.quantity)}"></div>
+                                        <div class="giacu" th:id="${'giacu'+product.product.id}" th:text="${#numbers.formatCurrency(product.product.price * product.quantity)}"></div>
                                         <a th:href="${'/public/cart/delete/'+product.product.id}" class="remove mt-auto"><i class="far fa-trash-alt"></i></a>
                                     </div>
                                 </div>
@@ -399,19 +399,16 @@
                                 <div class="tonggiatien" style="margin-right: 20px">
                                     <div class="group d-flex justify-content-between">
                                         <p class="label">Tạm tính:</p>
-                                        <p class="tamtinh" th:id="tamtinh" th:text="${session.order.total-30000}">328.000 ₫</p>
+                                        <p class="tamtinh" th:id="tamtinh" th:text="${#numbers.formatCurrency(session.order.total-30000)}">328.000 ₫</p>
                                     </div>
                                     <div class="group d-flex justify-content-between">
                                         <p class="label">Phí vận chuyển:</p>
-                                        <p class="phivanchuyen">30000</p>
+                                        <p class="phivanchuyen">30.000 đ</p>
                                     </div>
-                                    <div class="group d-flex justify-content-between">
-                                        <p class="label">Phí dịch vụ:</p>
-                                        <p class="phidicvu">0</p>
-                                    </div>
+
                                     <div class="group d-flex justify-content-between align-items-center">
                                         <strong class="text-uppercase">Tổng cộng:</strong>
-                                        <p class="tongcong" th:id="tongtien" th:text="${session.order.total+' đ'}">328.000 ₫</p>
+                                        <p class="tongcong" th:id="tongtien" th:text="${#numbers.formatCurrency(session.order.total)}">328.000 ₫</p>
                                     </div>
                                     <small class="note d-flex justify-content-end text-muted">
                                         (Giá đã bao gồm VAT)

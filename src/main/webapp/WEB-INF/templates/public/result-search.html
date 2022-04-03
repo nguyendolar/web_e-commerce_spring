@@ -154,7 +154,7 @@
                                     })
                                 }else if(data == "true"){
                                     swal({
-                                        title: 'Đăng kí thành công vui lòng vào mail xác thực!',
+                                        title: 'Đăng kí thành công!',
                                         /* text: 'Redirecting...', */
                                         icon: 'success',
                                         timer: 5000,
@@ -287,8 +287,8 @@
                                         <h6 class="card-title ten" th:text="${product.name}">Lập Kế Hoạch Kinh Doanh Hiệu Quả</h6>
                                         <small class="tacgia text-muted" th:text="${product.category.name}">Brian Finch</small>
                                         <div class="gia d-flex align-items-baseline">
-                                            <div class="giamoi" th:text="${product.price - (product.price * product.discount / 100)}+' đ'"></div>
-                                            <div class="giacu text-muted" th:text="${product.price}+' đ'"></div>
+                                            <div class="giamoi" th:text="${#numbers.formatCurrency(product.price - (product.price * product.discount / 100))}"></div>
+                                            <div class="giacu text-muted" th:text="${#numbers.formatCurrency(product.price)}"></div>
                                             <div class="sale" th:text="'-'+${product.discount}+'%'"></div>
                                         </div>
                                         <div class="danhgia">

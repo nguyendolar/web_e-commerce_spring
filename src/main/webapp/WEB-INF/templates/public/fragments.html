@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="vi">
 
 <head th:fragment="html_head">
-  <title>DealDevice-Mua thiệt bị trực tuyến giá rẻ nhất</title>
+  <title>DealDevice-Mua thiết bị điện tử</title>
   <meta name="description"
         content="Mua sách online hay, giá tốt nhất, combo sách hot bán chạy, giảm giá cực khủng cùng với những ưu đãi như miễn phí giao hàng, quà tặng miễn phí, đổi trả nhanh chóng. Đa dạng sản phẩm, đáp ứng mọi nhu cầu.">
   <meta name="keywords" content="nhà sách online, mua sách hay, sách hot, sách bán chạy, sách giảm giá nhiều">
@@ -96,7 +96,7 @@
                         })
                       }else if(data == "true"){
                         swal({
-                          title: 'Đăng kí thành công vui lòng vào mail xác thực!',
+                          title: 'Đăng kí thành công!',
                           /* text: 'Redirecting...', */
                           icon: 'success',
                           timer: 5000,
@@ -256,6 +256,7 @@
           </div>
 
           <div th:if="${session.user}" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item nutdangky text-center mb-2" href="/public/user/order" >Lịch sử đặt hàng</a>
             <a class="dropdown-item nutdangky text-center mb-2" href="/public/user/logout" >Đăng xuất</a>
 
           </div>

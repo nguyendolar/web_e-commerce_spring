@@ -17,7 +17,7 @@
 
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" th:href="@{/public/css/product-item.css}">
+  <link rel="stylesheet" th:href="@{/public/css/gio-hang.css}">
   <script type="text/javascript" th:src="@{/public/js/main.js}"></script>
   <link rel="stylesheet" th:href="@{/public/fontawesome_free_5.13.0/css/all.css}">
 
@@ -40,8 +40,29 @@
   <style>img[alt="www.000webhost.com"]{display: none;}</style>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <script>
-    function abc(){
-      alert("Dsds")
+    function changeNumber(id){
+      var nameId = 'numberCart'+id;
+      var giamoiId = "giamoi"+id;
+      var giacuId = "giacu"+id;
+      const quantity = document.getElementById(nameId).value;
+      const giamoi = document.getElementById(giamoiId);
+      const giacu = document.getElementById(giacuId);
+      $.ajax({
+        url: "/public/cart/update-number",
+        type:"post",
+        data:{
+          productId:id,
+          quantity:quantity
+        },
+        success: function(data){
+          giamoi.innerHTML = data.giaMoi;
+          giacu.innerHTML = data.giaCu;
+          const tamtinh = document.getElementById("tamtinh");
+          const tongtien = document.getElementById("tongtien");
+          tamtinh.innerHTML = data.total;
+          tongtien.innerHTML = data.total + 30000;
+        }
+      });
     }
     function login(){
       var password = $('#password1').val();
@@ -82,13 +103,13 @@
                         title: 'Đăng nhập thành công !',
                         /* text: 'Redirecting...', */
                         icon: 'success',
-                        timer: 5000,
+                        timer: 3000,
                         buttons: true,
                         type: 'success'
                       })
                       setInterval(function(){
                         location.reload()
-                      }, 3000);
+                      }, 2000);
                     } else {
                       swal({
                         title: 'Tài khoản chưa xác thực vui lòng check mail!',
@@ -217,7 +238,30 @@
      aria-labelledby="dangnhap_tieude" aria-hidden="true">
 
 </div>
-
+<div th:if="${user_login}" >
+  <script>
+    swal({
+      title: 'Bạn cần phải đăng nhập',
+      /* text: 'Redirecting...', */
+      icon: 'error',
+      timer: 3000,
+      buttons: true,
+      type: 'error'
+    })
+  </script>
+</div>
+<div th:if="${success}" >
+  <script>
+    swal({
+      title: 'Thành công',
+      /* text: 'Redirecting...', */
+      icon: 'success',
+      timer: 3000,
+      buttons: true,
+      type: 'success'
+    })
+  </script>
+</div>
 <!-- thanh "danh muc sach" đã được ẩn bên trong + hotline + ho tro truc tuyen -->
 <section  class="duoinavbar">
   <div class="container text-white">
@@ -266,211 +310,84 @@
   <div class="container">
     <ol class="breadcrumb mb-0 p-0 bg-transparent">
       <li class="breadcrumb-item"><a href="/public/home">Trang chủ</a></li>
-      <li class="breadcrumb-item active"><a th:href="'/public/product/'+${product.category.id}" th:text="${product.category.name}">Sách mới tuyển chọn</a></li>
-
+      <li class="breadcrumb-item"><a href="/public/user/order" >Lịch sử đặt hàng</a></li>
+      <li class="breadcrumb-item active"><a href="#" >Chi tiết đơn hàng</a></li>
     </ol>
   </div>
 </section>
-
-<!-- nội dung của trang  -->
-<section class="product-page mb-4">
+<section class="content my-3 mb-5">
   <div class="container">
-    <!-- chi tiết 1 sản phẩm -->
-    <div class="product-detail bg-white p-4">
-      <div class="row">
-        <!-- ảnh  -->
-        <div class="col-md-5 khoianh">
-          <div class="anhto mb-4">
-            <a class="active"  href="images/lap-ke-hoach-kinh-doanh-hieu-qua-mt.jpg" data-fancybox="thumb-img">
-              <img th:src="'/resources/uploads/' + ${product.image}" class="product-image" alt="lap-ke-hoach-kinh-doanh-hieu-qua-mt" style="width: 100%;">
-            </a>
-
-          </div>
-          <div class="list-anhchitiet d-flex mb-4" style="margin-left: 2rem;">
-            <img class="thumb-img thumb1 mr-3 img-fluid" th:src="'/resources/uploads/' + ${product.image}"  alt="lap-ke-hoach-kinh-doanh-hieu-qua-mt">
-
-          </div>
+    <div class="row">
+      <div class="col-6">
+        <div class="">
+          <label  class="col-form-label">Mã đơn hàng:</label>
+          <input type="text" name="name" th:value="${order.id}" readonly class="form-control" >
         </div>
-        <!-- thông tin sản phẩm: tên, giá bìa giá bán tiết kiệm, các khuyến mãi, nút chọn mua.... -->
-        <div class="col-md-7 khoithongtin">
-          <div class="row">
-            <div class="col-md-12 header">
-              <h4 class="ten" th:text="${product.name}"></h4>
-              <div class="rate">
-                <strong style="color: #FF0000;margin-right: 5px"><span th:text="${ave}"></span>/5</strong>
-                <i class="fa fa-star active"></i>
-              </div>
-              <hr>
-            </div>
-            <div class="col-md-7">
-              <div class="gia">
-                <div class="giabia">Giá bìa:<span class="giacu ml-2" th:text="${#numbers.formatCurrency(product.price)}"></span></div>
-                <div class="giaban">Giá bán tại DealDevice: <span
-                        class="giamoi font-weight-bold" th:text="${#numbers.formatCurrency(product.price - (product.price * product.discount / 100))}">111.200 </span><span class="donvitien"> </span></div>
-                <div class="tietkiem">Tiết kiệm: <b th:text="${#numbers.formatCurrency(product.price - (product.price - (product.price * product.discount / 100)))}">27.800 ₫</b> <span class="sale">-20%</span>
-                </div>
-              </div>
-              <div class="uudai my-3">
-                <h6 class="header font-weight-bold">Khuyến mãi & Ưu đãi tại DealDevice:</h6>
-                <ul>
-                  <li><b>Miễn phí giao hàng </b>cho đơn hàng từ 150.000đ ở TP.HCM và 300.000đ ở
-                    Tỉnh/Thành khác <a href="#" style="display: none">>> Chi tiết</a></li>
-                  <li><b>Combo sách HOT - GIẢM 25% </b><a href="#" style="display: none">>>Xem ngay</a></li>
-<!--                  <li>Tặng Bookmark cho mỗi đơn hàng</li>-->
-<!--                  <li>Bao sách miễn phí (theo yêu cầu)</li>-->
-                </ul>
-              </div>
-              <div class="soluong d-flex">
-                <label class="font-weight-bold">Số lượng: </label>
-                <div class="input-number input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text btn-spin btn-dec">-</span>
-                  </div>
-                  <input type="text" value="1" id="quantity" class="soluongsp  text-center">
-                  <div class="input-group-append">
-                    <span class="input-group-text btn-spin btn-inc">+</span>
-                  </div>
-                </div>
-              </div>
-              <input type="hidden" id="productId" th:value="${product.id}"/>
-              <div  class="nutmua btn w-100 text-uppercase">Chọn mua</div>
-              <a class="huongdanmuahang text-decoration-none" href="#">(Vui lòng xem hướng dẫn mua
-                hàng)</a>
-              <small class="share">Share: </small>
-              <div class="fb-like" data-href="https://www.facebook.com/DealBook-110745443947730/"
-                   data-width="300px" data-layout="button" data-action="like" data-size="small"
-                   data-share="true"></div>
-            </div>
-            <!-- thông tin khác của sản phẩm:  tác giả, ngày xuất bản, kích thước ....  -->
-            <div class="col-md-5">
-              <div class="thongtinsach">
-                <ul>
-                  <li>Danh mục: <a th:href="'/public/product/'+${product.category.id}" class="tacgia" th:text="${product.category.name}">Brian Finch</a></li>
-                  <li>Ngày thêm: <b th:text="${product.createdAt}">04-2020</b></li>
-                  <li>Kho: <b th:text="${product.quantity}+ ' sản phẩm'">20.5 x 13.5 cm</b></li>
-                  <li>Lượt xem: <b th:text="${product.viewCount}">Bìa mềm</b></li>
-                </ul>
-              </div>
-            </div>
-          </div>
+        <div class="">
+          <label  class="col-form-label">Ngày đặt hàng:</label>
+          <input type="text" name="price" th:value="${order.orderDate}" readonly class="form-control" >
         </div>
-
-        <!-- decripstion của 1 sản phẩm: giới thiệu , đánh giá độc giả  -->
-        <div class="product-description col-md-9">
-          <!-- 2 tab ở trên  -->
-          <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-              <a class="nav-item nav-link active text-uppercase" id="nav-gioithieu-tab"
-                 data-toggle="tab" href="#nav-gioithieu" role="tab" aria-controls="nav-gioithieu"
-                 aria-selected="true">Giới thiệu</a>
-              <a class="nav-item nav-link text-uppercase" id="nav-danhgia-tab" data-toggle="tab"
-                 href="#nav-danhgia" role="tab" aria-controls="nav-danhgia"
-                 aria-selected="false">Đánh
-                giá của độc giả</a>
-            </div>
-          </nav>
-          <!-- nội dung của từng tab  -->
-          <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active ml-3" id="nav-gioithieu" role="tabpanel"
-                 aria-labelledby="nav-gioithieu-tab">
-              <p th:utext="${product.description}"></p>
-            </div>
-            <div class="tab-pane fade" id="nav-danhgia" role="tabpanel" aria-labelledby="nav-danhgia-tab">
-              <div class="row">
-                <div class="col-md-8 ">
-                  <p class="tieude">Danh sách bình luận</p>
-                  <th:block th:each="cmt,index : ${listC}">
-                  <div style="margin-bottom: 5px;width : 500px;background-color: #DDDDDD;padding: 5px;">
-                    <strong style="width : 30px;display: inline" th:text="${cmt.user.fullName}"></strong> : <span th:text="${cmt.text}"></span>
-                  </div>
-                    <th:block/>
-                </div>
-                <div class="col-md-4" th:if="${session.user}">
-                      <p class="tieude">Đánh giá của bạn</p>
-                      <form action="/public/product/comment" method="post">
-                        <input type="hidden" th:value="${product.id}" name="id">
-                        <div class="form-label-group">
-                          <select class="form-control" name="rate" required>
-                            <option value="" selected>Chọn số sao</option>
-                            <option value="1" >1 sao</option>
-                            <option value="2" >2 sao</option>
-                            <option value="3" >3 sao</option>
-                            <option value="4" >4 sao</option>
-                            <option value="5" >5 sao</option>
-                          </select>
-                        </div>
-                        <div class="form-label-group">
-                          <textarea class="form-control" name="text" rows="5">Nhập đánh giá</textarea>
-                        </div>
-                        <button class="btn btn-lg text-white mt-3" type="submit"
-                                style="background: #F5A623">Gửi đánh giá</button>
-                      </form>
-                </div>
-              </div>
-            </div>
-            <hr>
-            <!-- het tab nav-danhgia  -->
-          </div>
-          <!-- het tab-content  -->
+        <div class="">
+          <label  class="col-form-label">Tổng tiền:</label>
+          <input type="text" name="quantity" th:value="${#numbers.formatCurrency(order.amount)}" readonly class="form-control" >
         </div>
-        <!-- het product-description -->
+        <div class="">
+          <label  class="col-form-label">Trạng thái:</label>
+          <input type="text" name="quantity" th:if="${order.status == 0}" value="Đã hủy" readonly class="form-control" >
+          <input type="text" name="quantity" th:if="${order.status == 1}" value="Đang xử lý" readonly class="form-control" >
+          <input type="text" name="quantity" th:if="${order.status == 2}" value="Đang giao hàng" readonly class="form-control" >
+          <input type="text" name="quantity" th:if="${order.status == 3}" value="Đã giao hàng" readonly class="form-control" >
+        </div>
       </div>
-      <!-- het row  -->
+      <div class="col-6">
+        <div class="">
+          <label  class="col-form-label">Khách hàng:</label>
+          <input type="text" name="name" th:value="${order.user.fullName}" class="form-control" readonly>
+        </div>
+        <div class="">
+          <label  class="col-form-label">Số điện thoại:</label>
+          <input type="text" name="price" th:value="${order.phoneNumber}" class="form-control" readonly>
+        </div>
+        <div class="">
+          <label  class="col-form-label">Địa chỉ:</label>
+          <input type="text" name="quantity" th:value="${order.address}" class="form-control" readonly>
+        </div>
+        <div class="">
+          <label  class="col-form-label">Ghi chú:</label>
+          <input type="text" name="quantity" th:value="${order.description}" class="form-control" readonly>
+        </div>
+      </div>
     </div>
-    <!-- het product-detail -->
+    <table class="table" style="margin-bottom: 100px;margin-top: 20px">
+      <thead class="thead-light">
+      <tr>
+        <th scope="col">STT</th>
+        <th scope="col">Ảnh</th>
+        <th scope="col">Sản phẩm</th>
+        <th scope="col">Giá</th>
+        <th scope="col">Số lượng</th>
+        <th scope="col">Thành tiền</th>
+      </tr>
+      </thead>
+      <tbody>
+      <th:block th:each="category,index : ${list}">
+        <tr>
+          <td th:text="${index.index +1}"></td>
+          <td ><img style="width: 150px; height: 100px" th:src="'/resources/uploads/' + ${category.product.image}"></td>
+          <td th:text="${category.product.name}"></td>
+          <td th:text="${#numbers.formatCurrency(category.unitPrice)}"></td>
+          <td th:text="${#numbers.formatInteger(category.discount,1)}"></td>
+          <td th:text="${#numbers.formatCurrency(category.discount * category.unitPrice)}"></td>
+        </tr>
+      </th:block>
+      </tbody>
+    </table>
   </div>
   <!-- het container  -->
 </section>
-<!-- het product-page -->
+<!-- het khoi content  -->
 
-<!-- khối sản phẩm tương tự -->
-<section class="_1khoi sachmoi">
-  <div class="container">
-    <div class="noidung bg-white" style=" width: 100%;">
-      <div class="row">
-        <!--header-->
-        <div class="col-12 d-flex justify-content-between align-items-center pb-2 bg-light pt-4">
-          <h5 class="header text-uppercase" style="font-weight: 400;">Sản phẩm tương tự</h5>
-          <a href="/public/product/all" class="btn btn-warning btn-sm text-white">Xem tất cả</a>
-        </div>
-      </div>
-      <div class="khoisanpham" style="padding-bottom: 2rem;">
-        <!-- 1 sản phẩm -->
-        <th:block th:each="product,index : ${productsExam}">
-          <div class="card">
-            <a th:href="'/public/product/detail/'+${product.id}" class="motsanpham" style="text-decoration: none; color: black;" data-toggle="tooltip"
-               data-placement="bottom" title="Lập Kế Hoạch Kinh Doanh Hiệu Quả">
-              <img class="card-img-top anh" th:src="'/resources/uploads/' + ${product.image}" alt="lap-ke-hoach-kinh-doanh-hieu-qua">
-              <div class="card-body noidungsp mt-3">
-                <h6 class="card-title ten" th:text="${product.name}">Lập Kế Hoạch Kinh Doanh Hiệu Quả</h6>
-                <small class="tacgia text-muted" th:text="${product.category.name}">Brian Finch</small>
-                <div class="gia d-flex align-items-baseline">
-                  <div class="giamoi" th:text="${#numbers.formatCurrency(product.price - (product.price * product.discount / 100))}"></div>
-                  <div class="giacu text-muted" th:text="${#numbers.formatCurrency(product.price)}"></div>
-                  <div class="sale" th:text="'-'+${product.discount}+'%'"></div>
-                </div>
-                <div class="danhgia">
-                  <ul class="d-flex" style="list-style: none;">
-                    <li class="active"><i class="fa fa-star"></i></li>
-                    <li class="active"><i class="fa fa-star"></i></li>
-                    <li class="active"><i class="fa fa-star"></i></li>
-                    <li class="active"><i class="fa fa-star"></i></li>
-                    <li><i class="fa fa-star"></i></li>
-                    <li><span class="text-muted" th:text="${product.viewCount} + ' lượt xem'">0 nhận xét</span></li>
-                  </ul>
-                </div>
-              </div>
-            </a>
-          </div>
-          <th:block/>
-
-      </div>
-    </div>
-  </div>
-</section>
-
-
-
+<!-- thanh cac dich vu :mien phi giao hang, qua tang mien phi ........ -->
 
 <!-- het .abovefooter  -->
 

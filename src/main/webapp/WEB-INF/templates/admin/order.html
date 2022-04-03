@@ -51,13 +51,14 @@
                   <td th:text="${category.id}"></td>
                   <td th:text="${category.user.fullName}"></td>
                   <td th:text="${category.phoneNumber}"></td>
-                  <td th:text="${category.amount}"></td>
+                  <td th:text="${#numbers.formatCurrency(category.amount)}"></td>
                   <td th:text="${category.orderDate}"></td>
+                  <td th:if="${category.status == 0}">Đã hủy</td>
                   <td th:if="${category.status == 1}">Đang xử lý</td>
                   <td th:if="${category.status == 2}">Đang giao hàng</td>
                   <td th:if="${category.status == 3}">Đã giao hàng</td>
                   <td>
-                    <button style="width: 100px" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    <button th:if="${category.status != 0}" style="width: 100px" type="button" class="btn btn-primary" data-bs-toggle="modal"
                             th:data-bs-target="'#exampleModal'+${category.id}">
                       Cập nhập
                     </button>
@@ -82,9 +83,8 @@
                             <label  class="col-form-label">Trạng thái đơn hàng:</label>
                             <select class="form-control" name="status" required>
                               <option value="" selected >-- Chọn trạng thái --</option>
-                              <option value="1"  >Đang xử lý</option>
-                              <option value="2"  >Đang giao hàng</option>
-                              <option value="3"  >Đã giao hàng</option>
+                              <option value="2" th:if="${category.status == 1}" >Đang giao hàng</option>
+                              <option value="3" th:if="${category.status == 2}"  >Đã giao hàng</option>
                             </select>
 
                           </div>

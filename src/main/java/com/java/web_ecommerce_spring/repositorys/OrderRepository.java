@@ -3,6 +3,7 @@ package com.java.web_ecommerce_spring.repositorys;
 import com.java.web_ecommerce_spring.domain.Order;
 import com.java.web_ecommerce_spring.domain.OrderDetail;
 import com.java.web_ecommerce_spring.domain.Product;
+import com.java.web_ecommerce_spring.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -29,5 +30,7 @@ public interface OrderRepository extends JpaRepository<Order,Integer> {
     @Transactional
     @Query(value = "SELECT * FROM orders WHERE MONTH(order_date) = ?",nativeQuery = true)
     List<Order> getAmount(int month);
+
+    List<Order> findOrderByUser(User user);
 
 }

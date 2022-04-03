@@ -32,10 +32,11 @@
                 </div>
                 <div class="">
                   <label  class="col-form-label">Tổng tiền:</label>
-                  <input type="text" name="quantity" th:value="${order.amount}" readonly class="form-control" >
+                  <input type="text" name="quantity" th:value="${#numbers.formatCurrency(order.amount)}" readonly class="form-control" >
                 </div>
                 <div class="">
                   <label  class="col-form-label">Trạng thái:</label>
+                  <input type="text" name="quantity" th:if="${order.status == 0}" value="Đã hủy" readonly class="form-control" >
                   <input type="text" name="quantity" th:if="${order.status == 1}" value="Đang xử lý" readonly class="form-control" >
                   <input type="text" name="quantity" th:if="${order.status == 2}" value="Đang giao hàng" readonly class="form-control" >
                   <input type="text" name="quantity" th:if="${order.status == 3}" value="Đã giao hàng" readonly class="form-control" >
@@ -88,9 +89,9 @@
                   <td th:text="${index.index +1}"></td>
                   <td ><img style="width: 150px; height: 100px" th:src="'/resources/uploads/' + ${category.product.image}"></td>
                   <td th:text="${category.product.name}"></td>
-                  <td th:text="${category.unitPrice}"></td>
-                  <td th:text="${category.discount}"></td>
-                  <td th:text="${category.discount * category.unitPrice}"></td>
+                  <td th:text="${#numbers.formatCurrency(category.unitPrice)}"></td>
+                  <td th:text="${#numbers.formatInteger(category.discount,1)}"></td>
+                  <td th:text="${#numbers.formatCurrency(category.discount * category.unitPrice)}"></td>
                 </tr>
               </th:block>
               </tbody>

@@ -97,8 +97,8 @@
                             <h3 class="card-title ten" th:text="${product.name}"></h3>
                             <small class="tacgia text-muted" th:text="${product.category.name}"></small>
                             <div class="gia d-flex align-items-baseline">
-                                <div class="giamoi" th:text="${product.price - (product.price * product.discount / 100)}+' đ'"></div>
-                                <div class="giacu text-muted" th:text="${product.price}+' đ'"></div>
+                                <div class="giamoi" th:text="${#numbers.formatCurrency(product.price - (product.price * product.discount / 100))}"></div>
+                                <div class="giacu text-muted" th:text="${#numbers.formatCurrency(product.price)}"></div>
                                 <div class="sale" th:text="'-'+${product.discount}+'%'"></div>
                             </div>
                             <div class="danhgia">

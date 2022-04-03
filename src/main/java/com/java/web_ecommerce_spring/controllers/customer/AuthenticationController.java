@@ -1,13 +1,16 @@
 package com.java.web_ecommerce_spring.controllers.customer;
 
 import com.java.web_ecommerce_spring.constans.CommonConstants;
-import com.java.web_ecommerce_spring.domain.Product;
-import com.java.web_ecommerce_spring.domain.Role;
-import com.java.web_ecommerce_spring.domain.User;
+import com.java.web_ecommerce_spring.domain.*;
+import com.java.web_ecommerce_spring.serviceImpls.OrderDetailServiceImpl;
+import com.java.web_ecommerce_spring.serviceImpls.OrderServiceImpl;
+import com.java.web_ecommerce_spring.services.CategoryService;
 import com.java.web_ecommerce_spring.services.RoleService;
 import com.java.web_ecommerce_spring.services.UserService;
 import com.java.web_ecommerce_spring.utils.EncrytedPasswordUtils;
+import com.java.web_ecommerce_spring.utils.FileUtil;
 import com.java.web_ecommerce_spring.utils.MailUtil;
+import com.java.web_ecommerce_spring.utils.Middleware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Controller;
@@ -18,6 +21,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.security.Principal;
+import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -28,11 +34,21 @@ public class AuthenticationController {
     UserService userService;
 
     @Autowired
+    CategoryService categoryService;
+
+    @Autowired
+    OrderServiceImpl orderService;
+
+    @Autowired
+    OrderDetailServiceImpl orderDetailService;
+
+    @Autowired
     public JavaMailSenderImpl javaMailSenderImpl;
 
     @Autowired
     RoleService roleService;
 
+    Middleware middleware = new Middleware();
 
     @PostMapping("/register")
     public @ResponseBody String register(HttpServletRequest request){
@@ -100,6 +116,38 @@ public class AuthenticationController {
         ModelAndView mv = new ModelAndView("redirect:/public/home");
         HttpSession session = request.getSession(false);
         session.invalidate();
+        return mv;
+    }
+
+    @GetMapping({ "/order"})
+    public ModelAndView order(HttpServletRequest request)
+    {
+        User user = middleware.middlewareUser(request);
+        List<Order> list = orderService.findOrderByUser(user);
+        ModelAndView mv = new ModelAndView("public/order");
+        mv.addObject("categories",categoryService.getAll());
+        mv.addObject("list",list);
+        return mv;
+    }
+
+    @GetMapping("/order/cancel/{id}")
+    public ModelAndView delete(@PathVariable int id,RedirectAttributes rd,HttpServletRequest request)
+    {
+        ModelAndView mv = new ModelAndView("redirect:/public/user/order");
+        int status = 0 ;
+        orderService.update(status,id);
+        rd.addFlashAttribute(CommonConstants.SUCCESS, "SUCCESS");
+        return mv;
+    }
+
+    @GetMapping(value = "/order/detail/{id}")
+    public ModelAndView detail(@PathVariable int id){
+        ModelAndView mv = new ModelAndView("public/order-detail");
+        Order obj = orderService.findOrderById(id);
+        List<OrderDetail> list = orderDetailService.findOrderDetailsByOrder(obj);
+        mv.addObject("order",obj);
+        mv.addObject("categories",categoryService.getAll());
+        mv.addObject("list",list);
         return mv;
     }
 }
