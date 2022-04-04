@@ -28,7 +28,7 @@ public interface OrderRepository extends JpaRepository<Order,Integer> {
 
     @Modifying
     @Transactional
-    @Query(value = "SELECT * FROM orders WHERE MONTH(order_date) = ?",nativeQuery = true)
+    @Query(value = "SELECT * FROM orders WHERE status != 0 AND MONTH(order_date) = ?",nativeQuery = true)
     List<Order> getAmount(int month);
 
     List<Order> findOrderByUser(User user);

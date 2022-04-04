@@ -34,7 +34,9 @@ public class AdminHomeController {
         List<Order> listB = orderService.findAll();
         float sum = 0;
         for (Order order : listB) {
+	if(order.getStatus() != 0){
             sum = sum + order.getAmount();
+	}
         }
         //thongke
         List<Order> list1 = orderService.getAmount(1);
